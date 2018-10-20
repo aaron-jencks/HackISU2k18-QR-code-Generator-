@@ -504,8 +504,10 @@ namespace QRLibrary
 
             for(int i = 0; i < rows; i++)
             {
-                for(int j = 0; j < columns; j++)
+                for (int j = 0; j < columns; j++)
                 {
+                    #region Constant data
+
                     if ((j == 0 && (i < 7 || i > rows - 8)) || (i == 0 && (j < 7 || j > columns - 8)) ||
                         (i == 6 && (j < 7 || j > columns - 8)) || (j == 6 && (i < 7 || i > rows - 8)) ||
                         ((i == rows - 7 || i == rows - 1) && (j < 7)) || ((j == columns - 7 || j == columns - 1) && (i < 7)) ||
@@ -518,14 +520,14 @@ namespace QRLibrary
                         layout[i, j] = true;
                     else if (j == 6 && i > 7 && i < rows - 8 && (i % 2) == 0)    // Dshed Vertical
                         layout[i, j] = true;
-                    else if (((i - 4 >= 0 && i - 4 <= 4) || (j - 4 >= 0 && j - 4 <= 4)) &&
-                        (((j > 10 && (i == 4 || i == 5 || i == 6 || i == 7 || i == 8)) || 
-                        (i > 10 && (j == 4 || j == 5 || j == 6 || j == 7 || j == 8))) &&
-                        j < columns - 8 && i < rows - 8) &&
-                        ((((j - 8) % 20) == 0 || ((j - 8) % 20) == 2 || (((j - 8) % 20) == 18) || 
-                        (((j - 8) % 20) == 1) || (((j - 8) % 20) == 19)) ||
-                        (((i - 8) % 20) == 0 || ((i - 8) % 20) == 2 || ((i - 8) % 20) == 18) || 
-                        (((i - 8) % 20) == 1) || ((i - 8) % 20) == 19)) // Positioners on the dashed lines
+                    else if ((((i >= 4 && i <= 8) || (j >= 4 && j <= 8)) &&
+                        (((j > 10 && i <= 10) || (i > 10 && j <= 10)) && j < columns - 8 && i < rows - 8)) &&
+                        ((((i - 8) % 20) == 2) || (((j - 8) % 20) == 2) ||
+                        (((i - 8) % 20) == 18) || (((j - 8) % 20) == 18) ||
+                        ((((i - 8) % 20) == 0) && (j == 4 || j == 6 || j == 8)) ||
+                        ((((j - 8) % 20) == 0) && (i == 4 || i == 6 || i == 8)) ||
+                        (((((i - 8) % 20) == 1) || (((i - 8) % 20) == 19)) && (j == 4 || j == 8)) ||
+                        (((((j - 8) % 20) == 1) || (((j - 8) % 20) == 19)) && (i == 4 || i == 8)))) // Positioners on the dashed lines
                         layout[i, j] = true;
                     else if (((i - 4 != 0 && j - 4 != 0) && (j > 10 && i > 10 && j < columns - 8 && i < rows - 8)) &&
                         ((((((j - 8) % 20) == 0) && (((i - 8) % 20) != 1) && (((i - 8) % 20) != 19)) ||
@@ -537,6 +539,8 @@ namespace QRLibrary
                         ((((i - 8) % 20) == 1) && (((j - 8) % 20) != 19)) ||
                         ((((i - 8) % 20) == 19) && (((j - 8) % 20 != 1))))))    // Positioners not on the dashed lines
                         layout[i, j] = true;
+
+                    #endregion
                 }
             }
 
