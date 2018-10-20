@@ -11,6 +11,4 @@ namespace QRLibrary
 
     public enum ErrorCorrectionLevel { Low = 0, Medium, Q, High }
 
-
-
 }
