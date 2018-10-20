@@ -68,6 +68,11 @@ namespace QRLibrary.DataStreamStructure
                     // If the number of characters is not even, it appends a space to make it even
                     if (data.Length % 2 != 0)
                         data += " ";
+
+                    // Updates the character count
+                    characterCount = new AQRDataStreamData("Character Count",
+                        QRCode.ConvertToBoolean(data.Length / 2, characterCountBitCount));
+
                     temp = new List<bool>((data.Length / 2) * bitsPerCharacter);
                     for (int i = 0; i < data.Length; i += 2)
                     {
@@ -76,6 +81,10 @@ namespace QRLibrary.DataStreamStructure
                     }
                     break;
                 case DataStreamEncodingMode.Byte:
+                    // Updates the character count
+                    characterCount = new AQRDataStreamData("Character Count",
+                        QRCode.ConvertToBoolean(data.Length, characterCountBitCount));
+
                     temp = new List<bool>(data.Length);
                     foreach (char c in data)
                         temp.AddRange(QRCode.ConvertToBoolean(c, bitsPerCharacter));
