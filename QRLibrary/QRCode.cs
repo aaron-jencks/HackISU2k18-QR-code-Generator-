@@ -353,19 +353,138 @@ namespace QRLibrary
         /// <returns>Returns a 2D matrix of booleans representing the dots of the matrix [rows, columns]</returns>
         public bool[,] GetBooleanMatrix()
         {
-            // Calculates how many total pixels we need in order to create this code
-            // 49 squares per corner block
-            // 45 squares for the quiet zone around the corner blocks
-            // 8 from right square formatting
-            // 15 from the left square formatting
-            // 7 from bottom square formatting
-            // (RowLength - 16 - 5 * ((RowLength - 17)  / 17 - 1)) for the horizontal dashed line
-            // ^ Same for the Vertical dashed line, except replace RowLength with ColumnLength
-            // 25 * ((RowLength - 17) / 17 - 1) * ((ColumnLength - 17) / 17 - 1) for the smaller markers
-            // Plus the Length of all of the booleans in the encoded data
-            // 
-            int totalCount = 147;
-            return new bool[1,1];
+            #region Calculates the number of rows and columns
+
+            /// find the total square mass of the booleans in the QR code data
+            /// once you insert the 3 corner squares it's going to displace 222 squares which should add:
+            /// starting as a column, then alternate between adding rows and columns until no more squares
+            /// are displaced
+            /// once you add the dashed lines, this will displace x more squares, repeat the process
+            /// Now, starting from the left, add in the position markers displacing 25 squares each 
+            /// for every 17 rows you have minus the corner squares.
+            /// For the surplus created by these, add columns to the right of the current column being calculated
+            /// 
+
+            // Calculates the total square coverage of the data being encoded
+            int count = 0;
+            foreach (AQRDataStream stream in EncodedData)
+                count += stream.getAllData().Length;
+            int rows = (int)Math.Sqrt((double)count);
+            int columns = (int)Math.Sqrt((double)count);
+
+            // If the values aren't perfectly square, add a column
+            if (rows * columns < count)
+                columns++;
+
+            // Adds rows and columns until the three corner blocks are accounted for
+            int displaced = 222;
+            bool toggle = false;
+            do
+            {
+                if (toggle)
+                {
+                    columns += 1;
+                    displaced -= rows;
+                }
+                else
+                {
+                    rows += 1;
+                    displaced -= columns;
+                }
+
+                toggle = !toggle;
+            }
+            while (displaced > 0);
+
+            // Accounts for the dashed lines
+            rows++;
+            columns++;
+
+            // Handles accounting for the positioner blocks
+            int positionerCount = 0;
+
+            for (int i = 0; i < rows - 35; i += rows / 17)
+            {
+                if (++positionerCount * 25 > rows)
+                {
+                    if (toggle)
+                    {
+                        columns += 1;
+                        displaced -= rows;
+                    }
+                    else
+                    {
+                        rows += 1;
+                        displaced -= columns;
+                    }
+
+                    toggle = !toggle;
+
+                    positionerCount = 0;
+                }
+            }
+
+            for (int j = 0; j < columns - 35; j += columns / 17)
+            {
+                for (int i = 0; i < rows - 35; i += rows / 17)
+                {
+                    if (++positionerCount * 25 > rows)
+                    {
+                        if (toggle)
+                        {
+                            columns += 1;
+                            displaced -= rows;
+                        }
+                        else
+                        {
+                            rows += 1;
+                            displaced -= columns;
+                        }
+
+                        toggle = !toggle;
+
+                        positionerCount = 0;
+                    }
+                }
+            }
+
+            if (positionerCount > 0)
+            {
+                if (toggle)
+                {
+                    columns += 1;
+                    displaced -= rows;
+                }
+                else
+                {
+                    rows += 1;
+                    displaced -= columns;
+                }
+
+                toggle = !toggle;
+            }
+
+            #endregion
+
+            bool[,] layout = new bool[rows, columns];
+
+            for(int i = 0; i < rows; i++)
+            {
+                for(int j = 0; j < columns; j++)
+                {
+                    if ((j == 1 && (i < 7 || i > rows - 8)) || (i == 1 && (j < 7 || j > columns - 8)) ||
+                        (i == 6 && (j < 7 || j > columns - 8)) || (j == 6 && (i < 7 || i > rows - 8)) ||
+                        (((i >= 2 && i <= 4) || (i >= rows - 5 && i <= rows - 3))
+                        && ((j >= 2 && j <= 4) || (j >= columns - 5 && j <= columns - 3)))) // Corner squares
+                        layout[i, j] = true;
+                    else if (i == 6 && j > 7 && j < columns - 8 && (j % 2) == 0)    // Dashed horizontal
+                        layout[i, j] = true;
+                    else if (j == 6 && i > 7 && i < rows - 8 && (i % 2) == 0)    // Dshed Vertical
+                        layout[i, j] = true;
+                }
+            }
+
+            return new bool[rows, columns];
         }
 
         #endregion
