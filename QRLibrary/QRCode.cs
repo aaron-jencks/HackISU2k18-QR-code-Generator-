@@ -629,9 +629,21 @@ namespace QRLibrary
                     #region corner block breaker
 
                     // Breaks when the iterator is about to enter the formatting zone, or quiet zone
-                    if ((j > rows - 10 && i > columns - 10) ||
-                        (i < 9 && (j < 9 || j > rows - 10)))
-                        break;
+                    if (j > rows - 10 && i > columns - 10)
+                    {
+                        if (!toggle)
+                            break;
+                        else
+                            continue;
+                    }
+
+                    if (i < 9 && (j < 9 || j > rows - 10))
+                    {
+                        if (toggle)
+                            break;
+                        else
+                            continue;
+                    }
 
                     #endregion
 
@@ -667,6 +679,9 @@ namespace QRLibrary
 
                     #endregion
                 }
+
+                // Inverts the toggle 
+                toggle = !toggle;
             }
 
             return layout;
