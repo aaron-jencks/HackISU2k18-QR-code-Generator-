@@ -381,8 +381,9 @@ namespace QRLibrary
 
             // Calculates the total square coverage of the data being encoded
             int count = 0;
-            foreach (AQRDataStream stream in EncodedData)
+            foreach (AQRDataStreamCharacterPayload stream in EncodedData)
                 count += stream.getAllData().Length;
+            count *= 2;
             int rows = (int)Math.Sqrt((double)count);
             int columns = (int)Math.Sqrt((double)count);
 
@@ -416,6 +417,25 @@ namespace QRLibrary
 
             // Handles accounting for the positioner blocks
             int positionerCount = 0;
+
+            // Takes care of the mandatory positioner block
+            if (++positionerCount * 25 > rows)
+            {
+                if (toggle)
+                {
+                    columns += 1;
+                    displaced -= rows;
+                }
+                else
+                {
+                    rows += 1;
+                    displaced -= columns;
+                }
+
+                toggle = !toggle;
+
+                positionerCount = 0;
+            }
 
             for (int i = 0; i < rows - 35; i += rows / 17)
             {
@@ -498,8 +518,24 @@ namespace QRLibrary
                         layout[i, j] = true;
                     else if (j == 6 && i > 7 && i < rows - 8 && (i % 2) == 0)    // Dshed Vertical
                         layout[i, j] = true;
-                    else if ((i - 4 == 0 || j - 4 == 0) && 
-                        (((j - 8) % 20) == 0 || ((j - 8) % 20) == 2 || ((j - 8) % 20) == 18))
+                    else if (((i - 4 >= 0 && i - 4 <= 4) || (j - 4 >= 0 && j - 4 <= 4)) &&
+                        (((j > 10 && (i == 4 || i == 5 || i == 6 || i == 7 || i == 8)) || 
+                        (i > 10 && (j == 4 || j == 5 || j == 6 || j == 7 || j == 8))) &&
+                        j < columns - 8 && i < rows - 8) &&
+                        ((((j - 8) % 20) == 0 || ((j - 8) % 20) == 2 || (((j - 8) % 20) == 18) || 
+                        (((j - 8) % 20) == 1) || (((j - 8) % 20) == 19)) ||
+                        (((i - 8) % 20) == 0 || ((i - 8) % 20) == 2 || ((i - 8) % 20) == 18) || 
+                        (((i - 8) % 20) == 1) || ((i - 8) % 20) == 19)) // Positioners on the dashed lines
+                        layout[i, j] = true;
+                    else if (((i - 4 != 0 && j - 4 != 0) && (j > 10 && i > 10 && j < columns - 8 && i < rows - 8)) &&
+                        ((((((j - 8) % 20) == 0) && (((i - 8) % 20) != 1) && (((i - 8) % 20) != 19)) ||
+                        (((j - 8) % 20) == 2) || (((j - 8) % 20) == 18) ||
+                        ((((j - 8) % 20) == 1) && (((i - 8) % 20) != 1)) || 
+                        ((((j - 8) % 20) == 19) && (((i - 8) % 20) != 19))) &&
+                        ((((((i - 8) % 20) == 0) && (((j - 8) % 20) != 1) && (((j - 8) % 20) != 19)) ||
+                        ((i - 8) % 20) == 2 || ((i - 8) % 20) == 18) ||
+                        ((((i - 8) % 20) == 1) && (((j - 8) % 20) != 19)) ||
+                        ((((i - 8) % 20) == 19) && (((j - 8) % 20 != 1))))))    // Positioners not on the dashed lines
                         layout[i, j] = true;
                 }
             }

@@ -79,6 +79,7 @@ namespace QRLibrary.DataStreamStructure
                         int pair = QRCode.FindAlphaNumericPair(data[i], data[i + 1]);
                         temp.AddRange(QRCode.ConvertToBoolean(pair, bitsPerCharacter));
                     }
+                    dataBitStream = new AQRDataStreamData("Data Bit Stream", temp.ToArray());
                     break;
                 case DataStreamEncodingMode.Byte:
                     // Updates the character count
@@ -88,6 +89,7 @@ namespace QRLibrary.DataStreamStructure
                     temp = new List<bool>(data.Length * bitsPerCharacter);
                     foreach (char c in data)
                         temp.AddRange(QRCode.ConvertToBoolean(c, bitsPerCharacter));
+                    dataBitStream = new AQRDataStreamData("Data Bit Stream", temp.ToArray());
                     break;
                 case DataStreamEncodingMode.Kanji:
                     throw new NotImplementedException();

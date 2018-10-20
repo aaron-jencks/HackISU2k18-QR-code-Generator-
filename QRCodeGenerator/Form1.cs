@@ -43,8 +43,9 @@ namespace QRCodeGenerator
 
         private void paintCode()
         {
+            int pixel_size = 1;
             bool[,] layout = code.GetBooleanMatrix();
-            Bitmap canvas = new Bitmap((layout.GetUpperBound(0) + 1) * 10, (layout.GetUpperBound(1) + 1) * 10);
+            Bitmap canvas = new Bitmap((layout.GetUpperBound(0) + 1) * pixel_size, (layout.GetUpperBound(1) + 1) * pixel_size);
             Graphics g = Graphics.FromImage(canvas);
             Brush b = new SolidBrush(Color.Black);
             lock(g)
@@ -56,7 +57,7 @@ namespace QRCodeGenerator
                     for(int j = 0; j <= layout.GetUpperBound(1); j++)
                     {
                         if (layout[i, j])
-                            g.FillRectangle(b, i * 10, j * 10, 10, 10);
+                            g.FillRectangle(b, i * pixel_size, j * pixel_size, pixel_size, pixel_size);
                     }
                 }
             }

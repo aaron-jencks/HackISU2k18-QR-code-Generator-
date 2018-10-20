@@ -50,6 +50,9 @@
             // 
             // textBox
             // 
+            this.textBox.AcceptsReturn = true;
+            this.textBox.AcceptsTab = true;
+            this.textBox.AllowDrop = true;
             this.textBox.Location = new System.Drawing.Point(12, 40);
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
