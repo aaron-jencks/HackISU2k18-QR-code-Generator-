@@ -391,7 +391,6 @@ namespace QRLibrary
                 foreach(bool b in temp)
                     bitStream.Enqueue(b);   // Appends the data to the list of data AND DOES IT BACKWARDS
             }
-            count *= 2;
             int rows = (int)Math.Sqrt((double)count);
             int columns = (int)Math.Sqrt((double)count);
 
@@ -629,17 +628,26 @@ namespace QRLibrary
                     #region corner block breaker
 
                     // Breaks when the iterator is about to enter the formatting zone, or quiet zone
-                    if (j > rows - 10 && i > columns - 10)
+                    if (j < 9 && i > columns - 10)
+                    {
+                        if (i > columns - 10)
+                        {
+                            if (!toggle)
+                                break;
+                            else
+                                continue;
+                        }
+                        else if (i < 9)
+                        {
+                            if (toggle)
+                                break;
+                            else
+                                continue;
+                        }
+                    }
+                    else if (i < 9 && j > rows - 10)
                     {
                         if (!toggle)
-                            break;
-                        else
-                            continue;
-                    }
-
-                    if (i < 9 && (j < 9 || j > rows - 10))
-                    {
-                        if (toggle)
                             break;
                         else
                             continue;
@@ -650,7 +658,7 @@ namespace QRLibrary
                     #region Dashed Line skipper
 
                     if (j == 6)
-                        j += (toggle) ? -1 : 1;
+                        continue;
                     else if (i == 6)
                         break;
 
@@ -667,7 +675,8 @@ namespace QRLibrary
                     // since there's supposed to be a quiet zone.
                     if(object_mask[j, i] && object_mask[j, i - 1])
                     {
-                        for(int k = 0; k < 6; k++) { j += (toggle) ? -1 : 1; }
+                        j += (toggle) ? -5 : 5;
+                        continue;
                     }
 
                     #endregion
