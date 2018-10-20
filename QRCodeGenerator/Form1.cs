@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,7 +58,7 @@ namespace QRCodeGenerator
                     for(int j = 0; j <= layout.GetUpperBound(1); j++)
                     {
                         if (layout[i, j])
-                            g.FillRectangle(b, i * pixel_size, j * pixel_size, pixel_size, pixel_size);
+                            g.FillRectangle(b, j * pixel_size, i * pixel_size, pixel_size, pixel_size);
                     }
                 }
             }
@@ -81,7 +82,7 @@ namespace QRCodeGenerator
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
+            saveFileDialog1.Filter = "Bitmap Image|*.bmp";
             saveFileDialog1.Title = "Save an Image File";
             saveFileDialog1.ShowDialog();
 
@@ -89,6 +90,18 @@ namespace QRCodeGenerator
             if (saveFileDialog1.FileName != "")
             {
                 pictureBox.Image.Save(saveFileDialog1.FileName);
+            }
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Text Document|*.txt";
+            openFileDialog1.Title = "Select a text file to import";
+            openFileDialog1.ShowDialog();
+
+            if(openFileDialog1.FileName != "")
+            {
+                textBox.Text = File.ReadAllText(openFileDialog1.FileName);
             }
         }
     }
