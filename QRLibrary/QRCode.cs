@@ -567,6 +567,17 @@ namespace QRLibrary
             {
                 for(int j = rows - 1; j >= 0; j--)
                 {
+                    #region corner block breaker
+
+                    // Breaks when the iterator is about to enter the formatting zone, or quiet zone
+                    if ((j < 9 && i > columns - 10) ||
+                        (i < 9 && (j < 9 || j > rows - 10)))
+                        break;
+
+                    #endregion
+
+                    #region standard snake
+
                     // We hit a position block, which isn't accurately represented in the object map
                     // Therefore we need to fast forward until we hit the next wall
                     // Otherwise we should never hit two trues in the object map at the same time
@@ -581,6 +592,8 @@ namespace QRLibrary
                         layout[i, j] = bitStream.Dequeue();
                     if (!object_mask[i - 1, j])
                         layout[i - 1, j] = bitStream.Dequeue();
+
+                    #endregion
                 }
             }
 
