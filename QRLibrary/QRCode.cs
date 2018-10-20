@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QRLibrary.DataStreamFormatSpecifiers.Templates;
+using QRLibrary.DataStreamStructure;
 using QRLibrary.DataStreamStructure.Templates;
 
 namespace QRLibrary
@@ -63,7 +64,37 @@ namespace QRLibrary
         /// <returns>Returns an initialized data streaming object</returns>
         public static AQRDataStream generateTypicalStructure(DataStreamEncodingMode mode)
         {
+            AQRDataStreamEncodingFormat format = generateEncodingFormat(mode);
+            AQRDataStream stream;
 
+            switch (mode)
+            {
+                case DataStreamEncodingMode.AlphaNumeric:
+                case DataStreamEncodingMode.Byte:
+                case DataStreamEncodingMode.Kanji:
+                case DataStreamEncodingMode.Numeric:
+                    stream = new AQRDataStreamCharacterPayload(format);
+                    break;
+                case DataStreamEncodingMode.EOM:
+                    stream = new AQRDataStreamEOMPayload(format);
+                    break;
+                case DataStreamEncodingMode.ExtendedChannel:
+                    stream = new AQRDataStreamExtendedChannelPayload(format);
+                    break;
+                case DataStreamEncodingMode.FNC1_1:
+                    stream = new AQRDataStreamFNC1Payload(format);
+                    break;
+                case DataStreamEncodingMode.FNC1_2:
+                    stream = new AQRDataStreamFNC2Payload(format);
+                    break;
+                case DataStreamEncodingMode.StructuredAppend:
+                    stream = new AQRDataStreamStructurePayload(format);
+                    break;
+                default:
+                    throw new Exception("Unrecognized encoding mode");
+            }
+
+            return stream;
         }
 
         public static bool[] generateCharacterStream(string)
