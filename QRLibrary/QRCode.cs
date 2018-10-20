@@ -563,10 +563,65 @@ namespace QRLibrary
                 }
             }
 
+            // Saves the formatting bits that should be calculated now (9-0)
+            bool[] formats = findFormattingBits();
+            bool[] ECL = errorCorrectionLevel.getBooleanData();
+            bool[] Mask = maskPattern.getFormatKey();
+
             for(int i = columns - 1; i >= 0; i -= 2)
             {
                 for(int j = rows - 1; j >= 0; j--)
                 {
+                    #region Corners
+
+                    if(j == 8 && i > columns - 9)
+                    {
+                        // Top Right format block
+                        layout[rows - 8, 8] = formats[7];
+                        layout[rows - 7, 8] = formats[6];
+                        layout[rows - 6, 8] = formats[5];
+                        layout[rows - 5, 8] = formats[4];
+                        layout[rows - 4, 8] = formats[3];
+                        layout[rows - 3, 8] = formats[2];
+                        layout[rows - 2, 8] = formats[1];
+                        layout[rows - 1, 8] = formats[0];
+                        break;
+                    }
+                    else if(j <= 8 && i <= 8)
+                    {
+                        // Top Left format block
+                        layout[8, 0] = ECL[0];
+                        layout[8, 1] = ECL[1];
+                        layout[8, 2] = Mask[0];
+                        layout[8, 3] = Mask[1];
+                        layout[8, 4] = Mask[2];
+                        layout[8, 5] = formats[9];
+                        layout[8, 7] = formats[8];
+                        layout[8, 8] = formats[7];
+                        layout[7, 8] = formats[6];
+                        layout[5, 8] = formats[5];
+                        layout[4, 8] = formats[4];
+                        layout[3, 8] = formats[3];
+                        layout[2, 8] = formats[2];
+                        layout[1, 8] = formats[1];
+                        layout[0, 8] = formats[0];
+                        break;
+                    }
+                    else if(j > rows - 8 && i <= 8)
+                    {
+                        // Bottom Left Corner
+                        layout[rows - 7, 8] = formats[8];
+                        layout[rows - 6, 8] = formats[9];
+                        layout[rows - 5, 8] = Mask[2];
+                        layout[rows - 4, 8] = Mask[1];
+                        layout[rows - 3, 8] = Mask[0];
+                        layout[rows - 2, 8] = ECL[1];
+                        layout[rows - 1, 8] = ECL[0];
+                        break;
+                    }
+
+                    #endregion
+
                     #region corner block breaker
 
                     // Breaks when the iterator is about to enter the formatting zone, or quiet zone
