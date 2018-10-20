@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QRLibrary.DataStreamFormatSpecifiers.Templates;
+using QRLibrary.DataStreamStructure.Templates;
 
 namespace QRLibrary
 {
@@ -11,6 +12,11 @@ namespace QRLibrary
     {
         #region Static Methods
 
+        /// <summary>
+        /// Generates a Encoding format object from an enumerated typical stream formats
+        /// </summary>
+        /// <param name="mode">The Data Stream encoding mode</param>
+        /// <returns>Returns an encoding format object</returns>
         public static AQRDataStreamEncodingFormat generateEncodingFormat(DataStreamEncodingMode mode)
         {
             string code = "";
@@ -48,6 +54,16 @@ namespace QRLibrary
             }
 
             return new AQRDataStreamEncodingFormat(code);
+        }
+
+        /// <summary>
+        /// Creates a generic structure using the encoding format.
+        /// </summary>
+        /// <param name="mode">The data stream encoding mode</param>
+        /// <returns>Returns an initialized data streaming object</returns>
+        public static AQRDataStream generateTypicalStructure(DataStreamEncodingMode mode)
+        {
+
         }
 
         #endregion
