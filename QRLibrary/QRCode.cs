@@ -9,6 +9,10 @@ using QRLibrary.DataStreamStructure.Templates;
 
 namespace QRLibrary
 {
+    /// <summary>
+    /// Generic class for a QR Code, contains static methods for manipulating the stream data as well
+    /// as data for an individual QR code.
+    /// </summary>
     public class QRCode
     {
         #region Static Methods
@@ -72,11 +76,13 @@ namespace QRLibrary
             {
                 case DataStreamEncodingMode.AlphaNumeric:
                     temp = new AQRDataStreamCharacterPayload(format);
+                    temp.characterCountBitCount = 13;   // Updates the bit count for the character count field
                     temp.bitsPerCharacter = 11; // Per symbol
                     stream = temp;
                     break;
                 case DataStreamEncodingMode.Byte:
                     temp = new AQRDataStreamCharacterPayload(format);
+                    // The default value for the bit count for the character count field is okay here.
                     temp.bitsPerCharacter = 8;
                     stream = temp;
                     break;
@@ -117,9 +123,29 @@ namespace QRLibrary
         /// </summary>
         /// <param name="data">Data to be encoded</param>
         /// <returns></returns>
-        public static bool[] generateCharacterStream(string data)
+        public static AQRDataStreamCharacterPayload generateCharacterStream(string data, bool use_alpha = false)
         {
+            DataStreamEncodingMode mode = (use_alpha) ? DataStreamEncodingMode.AlphaNumeric : DataStreamEncodingMode.Byte;
+            AQRDataStreamCharacterPayload result = (AQRDataStreamCharacterPayload)generateTypicalStructure(mode);
+            result.encodeData(data);
+            return result;
+        }
 
+        /// <summary>
+        /// Determines if the string contains only characters A-Z, Space, $, *, +, -, ., /, :
+        /// </summary>
+        /// <param name="s">String to check</param>
+        /// <returns>Returns if the string is alphanumeric or not</returns>
+        public static bool isAlphaNumeric(string s)
+        {
+            string test = " $*+-./:";
+            foreach(char c in s)
+            {
+                if (c < 'A' || c > 'Z')
+                    if (!test.Contains(c))
+                        return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -188,6 +214,54 @@ namespace QRLibrary
                     result[bits - 1 - i] = true;
             }
             return result;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The data currently encoded in the QR Code
+        /// </summary>
+        public List<AQRDataStream> EncodedData { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Creates a new QR Code with not data encoded
+        /// </summary>
+        public QRCode()
+        {
+            EncodedData = new List<AQRDataStream>();
+        }
+
+        /// <summary>
+        /// Creates a new QR Code and encodes the given data into the QR Code
+        /// </summary>
+        /// <param name="data">Data to be encoded</param>
+        public QRCode(IEnumerable<string> data)
+        {
+            EncodedData = new List<AQRDataStream>();
+            foreach (string s in data)
+                EncodeString(s);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Encodes a string into the list of data streams used in this QR Code
+        /// </summary>
+        /// <param name="data"></param>
+        public void EncodeString(string data)
+        {
+            DataStreamEncodingMode mode = (isAlphaNumeric(data)) ? DataStreamEncodingMode.AlphaNumeric : DataStreamEncodingMode.Byte;
+            AQRDataStreamCharacterPayload temp = (AQRDataStreamCharacterPayload)generateTypicalStructure(mode);
+            temp.encodeData(data);
+            EncodedData.Add(temp);
         }
 
         #endregion
