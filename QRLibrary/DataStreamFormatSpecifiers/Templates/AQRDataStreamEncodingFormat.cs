@@ -58,6 +58,39 @@ namespace QRLibrary.DataStreamFormatSpecifiers.Templates
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Returns the current encoding mode of this object
+        /// </summary>
+        /// <returns></returns>
+        public  DataStreamEncodingMode getEncodingMode()
+        {
+            switch(ToString())
+            {
+                case "0001":
+                    return DataStreamEncodingMode.Numeric;
+                case "0010":
+                    return DataStreamEncodingMode.AlphaNumeric;
+                case "0100":
+                    return DataStreamEncodingMode.Byte;
+                case "1000":
+                    return DataStreamEncodingMode.Kanji;
+                case "0011":
+                    return DataStreamEncodingMode.StructuredAppend;
+                case "0111":
+                    return DataStreamEncodingMode.ExtendedChannel;
+                case "0101":
+                    return DataStreamEncodingMode.FNC1_1;
+                case "1001":
+                    return DataStreamEncodingMode.FNC1_2;
+                case "0000":
+                    return DataStreamEncodingMode.EOM;
+                default:
+                    throw new Exception("No valid encoding mode found!");
+            }
+        }
+
         public virtual bool[] getDataArray()
         {
             return dataArray;
@@ -74,5 +107,7 @@ namespace QRLibrary.DataStreamFormatSpecifiers.Templates
                 result += (b) ? "1" : "0";
             return result;
         }
+
+        #endregion
     }
 }

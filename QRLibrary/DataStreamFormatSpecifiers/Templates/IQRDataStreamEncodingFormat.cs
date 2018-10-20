@@ -16,5 +16,11 @@ namespace QRLibrary
         /// </summary>
         /// <returns>Returns a boolean array that represents the data encoding format</returns>
         bool[] getDataArray();
+
+        /// <summary>
+        /// Returns the enumeration form of the current encoding value
+        /// </summary>
+        /// <returns></returns>
+        DataStreamEncodingMode getEncodingMode();
     }
 }
