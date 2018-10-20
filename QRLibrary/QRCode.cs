@@ -629,7 +629,7 @@ namespace QRLibrary
                     #region corner block breaker
 
                     // Breaks when the iterator is about to enter the formatting zone, or quiet zone
-                    if ((j < 9 && i > columns - 10) ||
+                    if ((j > rows - 10 && i > columns - 10) ||
                         (i < 9 && (j < 9 || j > rows - 10)))
                         break;
 
