@@ -44,14 +44,14 @@ namespace QRLibrary.DataStreamStructure
 
         public AQRDataStreamCharacterPayload(IQRDataStreamEncodingFormat format, IEnumerable<IQRDataStreamData> payload = null) : base(format, payload)
         {
-            characterCount = payload.ToArray()[0] ?? new AQRDataStreamData("Character Count", new bool[characterCountBitCount]);
-            dataBitStream = payload.ToArray()[1] ?? new AQRDataStreamData("Data Bit Stream", new bool[0]);
+            characterCount = payload?.ToArray()[0] ?? new AQRDataStreamData("Character Count", new bool[characterCountBitCount]);
+            dataBitStream = payload?.ToArray()[1] ?? new AQRDataStreamData("Data Bit Stream", new bool[0]);
         }
 
         public AQRDataStreamCharacterPayload(string format, IEnumerable<IQRDataStreamData> payload = null) : base(format, payload)
         {
-            characterCount = payload.ToArray()[0] ?? new AQRDataStreamData("Character Count", new bool[characterCountBitCount]);
-            dataBitStream = payload.ToArray()[1] ?? new AQRDataStreamData("Data Bit Stream", new bool[0]);
+            characterCount = payload?.ToArray()[0] ?? new AQRDataStreamData("Character Count", new bool[characterCountBitCount]);
+            dataBitStream = payload?.ToArray()[1] ?? new AQRDataStreamData("Data Bit Stream", new bool[0]);
         }
 
         #endregion
@@ -85,7 +85,7 @@ namespace QRLibrary.DataStreamStructure
                     characterCount = new AQRDataStreamData("Character Count",
                         QRCode.ConvertToBoolean(data.Length, characterCountBitCount));
 
-                    temp = new List<bool>(data.Length);
+                    temp = new List<bool>(data.Length * bitsPerCharacter);
                     foreach (char c in data)
                         temp.AddRange(QRCode.ConvertToBoolean(c, bitsPerCharacter));
                     break;

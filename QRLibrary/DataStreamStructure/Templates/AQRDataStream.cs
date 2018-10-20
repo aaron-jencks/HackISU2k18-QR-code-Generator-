@@ -32,7 +32,7 @@ namespace QRLibrary.DataStreamStructure.Templates
         public AQRDataStream(IQRDataStreamEncodingFormat format, IEnumerable<IQRDataStreamData> payload = null)
         {
             this.format = format;
-            this.payload = payload.ToList() ?? new List<IQRDataStreamData>();
+            this.payload = payload?.ToList() ?? new List<IQRDataStreamData>();
         }
 
         public AQRDataStream(string format, IEnumerable<IQRDataStreamData> payload = null)

@@ -208,7 +208,7 @@ namespace QRLibrary
         /// <returns>Returns a boolean array representing the integer in binary code</returns>
         public static bool[] ConvertToBoolean(int num, int bits)
         {
-            if (num > Math.Pow(bits, 2))
+            if (num > Math.Pow(2, bits))
                 throw new InvalidOperationException("Number to conver to binary cannot be larger than the largest binary number allowed by the bit count!");
             bool[] result = new bool[bits];
             for (int i = bits; i >= 0; i--)
@@ -271,10 +271,24 @@ namespace QRLibrary
         /// <param name="data"></param>
         public void EncodeString(string data)
         {
-            DataStreamEncodingMode mode = (isAlphaNumeric(data)) ? DataStreamEncodingMode.AlphaNumeric : DataStreamEncodingMode.Byte;
-            AQRDataStreamCharacterPayload temp = (AQRDataStreamCharacterPayload)generateTypicalStructure(mode);
-            temp.encodeData(data);
-            EncodedData.Add(temp);
+            string dataTemp = data;
+            do
+            {
+                DataStreamEncodingMode mode = (isAlphaNumeric(data)) ? DataStreamEncodingMode.AlphaNumeric : DataStreamEncodingMode.Byte;
+                AQRDataStreamCharacterPayload temp = (AQRDataStreamCharacterPayload)generateTypicalStructure(mode);
+
+                // Splits the string if it's too big
+                if (data.Length > Math.Pow(2, temp.characterCountBitCount))
+                {
+                    dataTemp = data.Substring(0, (int)(Math.Pow(2, temp.characterCountBitCount) - 1));
+                    data = data.Substring((int)(Math.Pow(2, temp.characterCountBitCount)));
+                }
+                else
+                    data = "";
+
+                temp.encodeData(dataTemp);
+                EncodedData.Add(temp);
+            } while (data.Length > 0);
         }
 
         /// <summary>
@@ -472,19 +486,25 @@ namespace QRLibrary
             {
                 for(int j = 0; j < columns; j++)
                 {
-                    if ((j == 1 && (i < 7 || i > rows - 8)) || (i == 1 && (j < 7 || j > columns - 8)) ||
+                    if ((j == 0 && (i < 7 || i > rows - 8)) || (i == 0 && (j < 7 || j > columns - 8)) ||
                         (i == 6 && (j < 7 || j > columns - 8)) || (j == 6 && (i < 7 || i > rows - 8)) ||
-                        (((i >= 2 && i <= 4) || (i >= rows - 5 && i <= rows - 3))
-                        && ((j >= 2 && j <= 4) || (j >= columns - 5 && j <= columns - 3)))) // Corner squares
+                        ((i == rows - 7 || i == rows - 1) && (j < 7)) || ((j == columns - 7 || j == columns - 1) && (i < 7)) ||
+                        (((i >= 2 && i <= 4) ||
+                        (i >= rows - 5 && i <= rows - 3 && !(j >= columns - 5 && j <= columns - 3)))
+                        && ((j >= 2 && j <= 4) ||
+                        (j >= columns - 5 && j <= columns - 3 && !(i >= rows - 5 && i <= rows - 3))))) // Corner squares
                         layout[i, j] = true;
                     else if (i == 6 && j > 7 && j < columns - 8 && (j % 2) == 0)    // Dashed horizontal
                         layout[i, j] = true;
                     else if (j == 6 && i > 7 && i < rows - 8 && (i % 2) == 0)    // Dshed Vertical
                         layout[i, j] = true;
+                    else if ((i - 4 == 0 || j - 4 == 0) && 
+                        (((j - 8) % 20) == 0 || ((j - 8) % 20) == 2 || ((j - 8) % 20) == 18))
+                        layout[i, j] = true;
                 }
             }
 
-            return new bool[rows, columns];
+            return layout;
         }
 
         #endregion
