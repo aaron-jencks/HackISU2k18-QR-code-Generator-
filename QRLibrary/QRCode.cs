@@ -568,9 +568,13 @@ namespace QRLibrary
             bool[] ECL = errorCorrectionLevel.getBooleanData();
             bool[] Mask = maskPattern.getFormatKey();
 
+            // We'll use the toggle to switch between going up and going down in the columns of
+            // The array
+            toggle = true;
+
             for(int i = columns - 1; i >= 0; i -= 2)
             {
-                for(int j = rows - 1; j >= 0; j--)
+                for(int j = ((toggle) ? rows - 1 : 0); ((toggle) ? j >= 0 : j < rows); j += ((toggle) ? -1 : 1))
                 {
                     #region Corners
 
