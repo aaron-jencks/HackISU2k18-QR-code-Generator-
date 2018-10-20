@@ -39,6 +39,16 @@ namespace QRLibrary.DataStreamStructure.Templates
 
         #endregion
 
+        #region Operator methods
+
+        public static AQRDataStream operator +(AQRDataStream stream, IQRDataStreamData data)
+        {
+            stream.payload.Add(data);
+            return stream;
+        }
+
+        #endregion
+
         #region Inteface methods
 
         public virtual bool[] getAllData()
