@@ -9,6 +9,8 @@ namespace QRLibrary
 {
     public class QRCode
     {
+        #region Static Methods
+
         public static AQRDataStreamEncodingFormat generateEncodingFormat(DataStreamEncodingMode mode)
         {
             string code = "";
@@ -47,5 +49,7 @@ namespace QRLibrary
 
             return new AQRDataStreamEncodingFormat(code);
         }
+
+        #endregion
     }
 }
