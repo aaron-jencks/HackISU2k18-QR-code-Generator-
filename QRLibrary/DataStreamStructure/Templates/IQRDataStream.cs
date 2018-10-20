@@ -28,5 +28,11 @@ namespace QRLibrary.DataStreamStructure.Templates
         /// </summary>
         /// <returns>Returns a list of booleans dependent on the type of encoding format.</returns>
         bool[] getAllData();
+
+        /// <summary>
+        /// Takes the given string and encodes it into the current bit stream, modifying it's fields as necessary
+        /// </summary>
+        /// <param name="data"></param>
+        void encodeData(string data);
     }
 }

@@ -11,10 +11,16 @@ namespace QRLibrary.DataStreamFormatSpecifiers.Templates
     /// </summary>
     public class AQRDataStreamEncodingFormat : IQRDataStreamEncodingFormat
     {
+        #region Properties
+
         /// <summary>
         /// The boolean data representing the binary code
         /// </summary>
         protected bool[] dataArray { get; set; }
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new data stream format code from the given array
@@ -50,9 +56,23 @@ namespace QRLibrary.DataStreamFormatSpecifiers.Templates
 
         }
 
+        #endregion
+
         public virtual bool[] getDataArray()
         {
             return dataArray;
+        }
+
+        /// <summary>
+        /// Returns the string representing the data array in the format "00101011010..."
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            string result = "";
+            foreach (bool b in dataArray)
+                result += (b) ? "1" : "0";
+            return result;
         }
     }
 }

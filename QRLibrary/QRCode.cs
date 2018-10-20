@@ -112,7 +112,15 @@ namespace QRLibrary
             return stream;
         }
 
-        public static bool[] generateCharacterStream(string)
+        /// <summary>
+        /// Creates a basic byte formatted bit stream using the string provided
+        /// </summary>
+        /// <param name="data">Data to be encoded</param>
+        /// <returns></returns>
+        public static bool[] generateCharacterStream(string data)
+        {
+
+        }
 
         #endregion
     }

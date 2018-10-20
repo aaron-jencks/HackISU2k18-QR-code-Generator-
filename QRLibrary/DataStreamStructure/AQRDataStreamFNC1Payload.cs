@@ -25,5 +25,10 @@ namespace QRLibrary.DataStreamStructure
         }
 
         #endregion
+
+        public override void encodeData(string data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

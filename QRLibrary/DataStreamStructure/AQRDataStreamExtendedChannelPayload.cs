@@ -39,6 +39,11 @@ namespace QRLibrary.DataStreamStructure
 
         #region override methods
 
+        public override void encodeData(string data)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Returns the format code concatenated to the character count, and the data bit stream
         /// </summary>

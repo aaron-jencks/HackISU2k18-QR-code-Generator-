@@ -7,7 +7,7 @@ using QRLibrary.DataStreamFormatSpecifiers.Templates;
 
 namespace QRLibrary.DataStreamStructure.Templates
 {
-    public class AQRDataStream : IQRDataStream
+    public abstract class AQRDataStream : IQRDataStream
     {
         #region properties
 
@@ -22,6 +22,10 @@ namespace QRLibrary.DataStreamStructure.Templates
         public List<IQRDataStreamData> payload { get; set; }
 
         #endregion
+
+        #region Methods
+
+        public abstract void encodeData(string data);
 
         #region Constructors
 
@@ -76,6 +80,20 @@ namespace QRLibrary.DataStreamStructure.Templates
                 result.AddRange(d.getData());
 
             return result.ToArray();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Returns the string representing the data array in the format "00101011010..."
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            string result = "";
+            foreach (bool b in getAllData())
+                result += (b) ? "1" : "0";
+            return result;
         }
 
         #endregion
