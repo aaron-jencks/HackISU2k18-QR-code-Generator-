@@ -78,5 +78,18 @@ namespace QRCodeGenerator
             code.EncodeString(textBox.Text);
             paintCode();
         }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
+            saveFileDialog1.Title = "Save an Image File";
+            saveFileDialog1.ShowDialog();
+
+            // If the file name is not an empty string open it for saving.  
+            if (saveFileDialog1.FileName != "")
+            {
+                pictureBox.Image.Save(saveFileDialog1.FileName);
+            }
+        }
     }
 }
