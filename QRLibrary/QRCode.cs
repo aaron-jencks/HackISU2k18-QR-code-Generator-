@@ -66,6 +66,8 @@ namespace QRLibrary
 
         }
 
+        public static bool[] generateCharacterStream(string)
+
         #endregion
     }
 }
