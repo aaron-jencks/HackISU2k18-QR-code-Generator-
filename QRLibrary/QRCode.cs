@@ -367,6 +367,8 @@ namespace QRLibrary
         /// <returns>Returns a 2D matrix of booleans representing the dots of the matrix [rows, columns]</returns>
         public bool[,] GetBooleanMatrix()
         {
+            Queue<bool> bitStream = new Queue<bool>();
+
             #region Calculates the number of rows and columns
 
             /// find the total square mass of the booleans in the QR code data
@@ -380,9 +382,15 @@ namespace QRLibrary
             /// 
 
             // Calculates the total square coverage of the data being encoded
+            // THE READING OF THE DATA BACKWARDS MAKES THE READING OF THE MSB SO EASY LATER ON!!!
             int count = 0;
-            foreach (AQRDataStreamCharacterPayload stream in EncodedData)
-                count += stream.getAllData().Length;
+            for(int i = EncodedData.Count - 1; i >= 0; i--)
+            {
+                bool[] temp = EncodedData[i].getAllData();
+                count += temp.Length;
+                foreach(bool b in temp)
+                    bitStream.Enqueue(b);   // Appends the data to the list of data AND DOES IT BACKWARDS
+            }
             count *= 2;
             int rows = (int)Math.Sqrt((double)count);
             int columns = (int)Math.Sqrt((double)count);
@@ -501,7 +509,9 @@ namespace QRLibrary
             #endregion
 
             bool[,] layout = new bool[rows, columns];
+            bool[,] object_mask = new bool[rows, columns];
 
+            // Calculates the constant regions (spacing indicators, position indicators, etc...)
             for(int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
@@ -515,7 +525,10 @@ namespace QRLibrary
                         (i >= rows - 5 && i <= rows - 3 && !(j >= columns - 5 && j <= columns - 3)))
                         && ((j >= 2 && j <= 4) ||
                         (j >= columns - 5 && j <= columns - 3 && !(i >= rows - 5 && i <= rows - 3))))) // Corner squares
+                    {
                         layout[i, j] = true;
+                        object_mask[i, j] = true;
+                    }
                     else if (i == 6 && j > 7 && j < columns - 8 && (j % 2) == 0)    // Dashed horizontal
                         layout[i, j] = true;
                     else if (j == 6 && i > 7 && i < rows - 8 && (i % 2) == 0)    // Dshed Vertical
@@ -528,19 +541,46 @@ namespace QRLibrary
                         ((((j - 8) % 20) == 0) && (i == 4 || i == 6 || i == 8)) ||
                         (((((i - 8) % 20) == 1) || (((i - 8) % 20) == 19)) && (j == 4 || j == 8)) ||
                         (((((j - 8) % 20) == 1) || (((j - 8) % 20) == 19)) && (i == 4 || i == 8)))) // Positioners on the dashed lines
+                    {
                         layout[i, j] = true;
+                        object_mask[i, j] = true;
+                    }
                     else if (((i - 4 != 0 && j - 4 != 0) && (j > 10 && i > 10 && j < columns - 8 && i < rows - 8)) &&
                         ((((((j - 8) % 20) == 0) && (((i - 8) % 20) != 1) && (((i - 8) % 20) != 19)) ||
                         (((j - 8) % 20) == 2) || (((j - 8) % 20) == 18) ||
-                        ((((j - 8) % 20) == 1) && (((i - 8) % 20) != 1)) || 
+                        ((((j - 8) % 20) == 1) && (((i - 8) % 20) != 1)) ||
                         ((((j - 8) % 20) == 19) && (((i - 8) % 20) != 19))) &&
                         ((((((i - 8) % 20) == 0) && (((j - 8) % 20) != 1) && (((j - 8) % 20) != 19)) ||
                         ((i - 8) % 20) == 2 || ((i - 8) % 20) == 18) ||
                         ((((i - 8) % 20) == 1) && (((j - 8) % 20) != 19)) ||
                         ((((i - 8) % 20) == 19) && (((j - 8) % 20 != 1))))))    // Positioners not on the dashed lines
+                    {
                         layout[i, j] = true;
+                        object_mask[i, j] = true;
+                    }
 
                     #endregion
+                }
+            }
+
+            for(int i = columns - 1; i >= 0; i -= 2)
+            {
+                for(int j = rows - 1; j >= 0; j--)
+                {
+                    // We hit a position block, which isn't accurately represented in the object map
+                    // Therefore we need to fast forward until we hit the next wall
+                    // Otherwise we should never hit two trues in the object map at the same time
+                    // except for when we hit the corner blocks, and we're going to abort before we even hit that
+                    // since there's supposed to be a quiet zone.
+                    if(object_mask[i, j] && object_mask[i - 1, j])
+                    {
+                        do { j--; } while (object_mask[i, j] || object_mask[i - 1, j]);
+                    }
+
+                    if (!object_mask[i, j])
+                        layout[i, j] = bitStream.Dequeue();
+                    if (!object_mask[i - 1, j])
+                        layout[i - 1, j] = bitStream.Dequeue();
                 }
             }
 
