@@ -9,4 +9,8 @@ namespace QRLibrary
     
     public enum DataStreamEncodingMode { Numeric=0, AlphaNumeric, Byte, Kanji, StructuredAppend, ExtendedChannel, FNC1_1, FNC1_2, EOM }
 
+    public enum ErrorCorrectionLevel { Low = 0, Medium, Q, High }
+
+
+
 }
