@@ -41,7 +41,7 @@ namespace QRLibrary.DataStreamStructure.Templates
 
         #region Inteface methods
 
-        public bool[] getAllData()
+        public virtual bool[] getAllData()
         {
             List<bool> result = new List<bool>();
 
@@ -53,12 +53,12 @@ namespace QRLibrary.DataStreamStructure.Templates
             return result.ToArray();
         }
 
-        public bool[] getFormatCode()
+        public virtual bool[] getFormatCode()
         {
             return format.getDataArray();
         }
 
-        public bool[] getPayloadCode()
+        public virtual bool[] getPayloadCode()
         {
             List<bool> result = new List<bool>();
 
