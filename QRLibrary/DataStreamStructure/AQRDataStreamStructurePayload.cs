@@ -77,6 +77,11 @@ namespace QRLibrary.DataStreamStructure
             return result.ToArray();
         }
 
+        public override void encodeData(string data)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

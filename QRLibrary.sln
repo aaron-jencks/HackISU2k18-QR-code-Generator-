@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QRLibrary", "QRLibrary\QRLibrary.csproj", "{9B48528F-B280-4668-AC18-C74CDA975292}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QRCodeGenerator", "QRCodeGenerator\QRCodeGenerator.csproj", "{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9B48528F-B280-4668-AC18-C74CDA975292}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B48528F-B280-4668-AC18-C74CDA975292}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B48528F-B280-4668-AC18-C74CDA975292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

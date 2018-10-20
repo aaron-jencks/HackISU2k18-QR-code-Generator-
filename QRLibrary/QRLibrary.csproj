@@ -44,14 +44,31 @@
     <Compile Include="DataStreamFormatSpecifiers\Templates\AQRDataStreamEncodingFormat.cs" />
     <Compile Include="DataStreamFormatSpecifiers\Templates\IQRDataStreamEncodingFormat.cs" />
     <Compile Include="DataStreamStructure\AQRDataStreamCharacterPayload.cs" />
+    <Compile Include="DataStreamStructure\AQRDataStreamEOMPayload.cs" />
+    <Compile Include="DataStreamStructure\AQRDataStreamExtendedChannelPayload.cs" />
+    <Compile Include="DataStreamStructure\AQRDataStreamFNC1Payload.cs" />
+    <Compile Include="DataStreamStructure\AQRDataStreamFNC2Payload.cs" />
     <Compile Include="DataStreamStructure\AQRDataStreamStructurePayload.cs" />
     <Compile Include="DataStreamStructure\Templates\AQRDataStream.cs" />
     <Compile Include="DataStreamStructure\Templates\AQRDataStreamData.cs" />
     <Compile Include="DataStreamStructure\Templates\IQRDataStream.cs" />
     <Compile Include="DataStreamStructure\Templates\IQRDataStreamData.cs" />
+    <Compile Include="Error Correction Levels\Levels\AECLevel.cs" />
+    <Compile Include="Error Correction Levels\Levels\IECLevel.cs" />
+    <Compile Include="Mask Patterns\MaskEight.cs" />
+    <Compile Include="Mask Patterns\MaskFive.cs" />
+    <Compile Include="Mask Patterns\MaskFour.cs" />
+    <Compile Include="Mask Patterns\MaskOne.cs" />
+    <Compile Include="Mask Patterns\MaskSeven.cs" />
+    <Compile Include="Mask Patterns\MaskSix.cs" />
+    <Compile Include="Mask Patterns\MaskThree.cs" />
+    <Compile Include="Mask Patterns\MaskTwo.cs" />
+    <Compile Include="Mask Patterns\Templates\AMaskPattern.cs" />
+    <Compile Include="Mask Patterns\Templates\IMaskPattern.cs" />
     <Compile Include="QRCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
