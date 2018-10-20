@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace QRLibrary.DataStreamFormatSpecifiers.Templates
 {
+    /// <summary>
+    /// Inheritable class for that implements the IQRDataStreamEncodingFormat Interface
+    /// </summary>
     public class AQRDataStreamEncodingFormat : IQRDataStreamEncodingFormat
     {
         /// <summary>
