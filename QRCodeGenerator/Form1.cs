@@ -15,10 +15,12 @@ namespace QRCodeGenerator
     public partial class Form1 : Form
     {
         private QRCode code { get; set; } = new QRCode();
+        private Tuple<int, int> prevSize { get; set; }
 
         public Form1()
         {
             InitializeComponent();
+            prevSize = new Tuple<int, int>(Width, Height);
             resetImage();
         }
 
@@ -103,6 +105,17 @@ namespace QRCodeGenerator
             {
                 textBox.Text = File.ReadAllText(openFileDialog1.FileName);
             }
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            Tuple<int, int> difference = new Tuple<int, int>(Width - prevSize.Item1, Height - prevSize.Item2);
+            textBox.Height += difference.Item2;
+            pictureBox.Height += difference.Item2;
+            pictureBox.Width += difference.Item1;
+            textBox.Invalidate();
+            pictureBox.Invalidate();
+            paintCode();
         }
     }
 }

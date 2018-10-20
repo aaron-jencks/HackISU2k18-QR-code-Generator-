@@ -139,6 +139,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Form1";
             this.Text = "QR Code Generator";
+            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
