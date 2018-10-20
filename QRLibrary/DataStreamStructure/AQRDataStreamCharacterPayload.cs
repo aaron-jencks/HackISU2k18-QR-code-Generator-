@@ -53,8 +53,6 @@ namespace QRLibrary.DataStreamStructure
 
         #region override methods
 
-        public static AQRDataStreamCharacterPayload operator +(AQRDataStreamCharacterPayload stream, AQRDataStreamData)
-
         /// <summary>
         /// Returns the format code concatenated to the character count, and the data bit stream
         /// </summary>
