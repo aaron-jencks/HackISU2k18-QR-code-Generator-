@@ -33,6 +33,11 @@ namespace QRLibrary.DataStreamStructure
         /// </summary>
         protected int characterCountBitCount { get; set; } = 16;
 
+        /// <summary>
+        /// The number of bits allocated per unit of symbol for the specific type
+        /// </summary>
+        public int bitsPerCharacter { get; set; }
+
         #endregion
 
         #region Constructors

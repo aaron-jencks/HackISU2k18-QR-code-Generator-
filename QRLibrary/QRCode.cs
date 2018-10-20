@@ -64,16 +64,31 @@ namespace QRLibrary
         /// <returns>Returns an initialized data streaming object</returns>
         public static AQRDataStream generateTypicalStructure(DataStreamEncodingMode mode)
         {
+            AQRDataStreamCharacterPayload temp;
             AQRDataStreamEncodingFormat format = generateEncodingFormat(mode);
             AQRDataStream stream;
 
             switch (mode)
             {
                 case DataStreamEncodingMode.AlphaNumeric:
+                    temp = new AQRDataStreamCharacterPayload(format);
+                    temp.bitsPerCharacter = 11; // Per symbol
+                    stream = temp;
+                    break;
                 case DataStreamEncodingMode.Byte:
+                    temp = new AQRDataStreamCharacterPayload(format);
+                    temp.bitsPerCharacter = 8;
+                    stream = temp;
+                    break;
                 case DataStreamEncodingMode.Kanji:
+                    temp = new AQRDataStreamCharacterPayload(format);
+                    temp.bitsPerCharacter = 13;
+                    stream = temp;
+                    break;
                 case DataStreamEncodingMode.Numeric:
-                    stream = new AQRDataStreamCharacterPayload(format);
+                    temp = new AQRDataStreamCharacterPayload(format);
+                    temp.bitsPerCharacter = 10; // Per 3 digits
+                    stream = temp;
                     break;
                 case DataStreamEncodingMode.EOM:
                     stream = new AQRDataStreamEOMPayload(format);
