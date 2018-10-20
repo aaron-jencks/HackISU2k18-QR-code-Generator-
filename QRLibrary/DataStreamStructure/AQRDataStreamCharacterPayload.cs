@@ -60,7 +60,35 @@ namespace QRLibrary.DataStreamStructure
 
         public override void encodeData(string data)
         {
-            throw new NotImplementedException();
+            List<bool> temp = new List<bool>();
+
+            switch(format.getEncodingMode())
+            {
+                case DataStreamEncodingMode.AlphaNumeric:
+                    // If the number of characters is not even, it appends a space to make it even
+                    if (data.Length % 2 != 0)
+                        data += " ";
+                    temp = new List<bool>((data.Length / 2) * bitsPerCharacter);
+                    for (int i = 0; i < data.Length; i += 2)
+                    {
+                        int pair = QRCode.FindAlphaNumericPair(data[i], data[i + 1]);
+                        temp.AddRange(QRCode.ConvertToBoolean(pair, bitsPerCharacter));
+                    }
+                    break;
+                case DataStreamEncodingMode.Byte:
+                    temp = new List<bool>(data.Length);
+                    foreach (char c in data)
+                        temp.AddRange(QRCode.ConvertToBoolean(c, bitsPerCharacter));
+                    break;
+                case DataStreamEncodingMode.Kanji:
+                    throw new NotImplementedException();
+                    break;
+                case DataStreamEncodingMode.Numeric:
+                    throw new NotImplementedException();
+                    break;
+                default:
+                    throw new Exception("No valid encoding method found!");
+            }
         }
 
         /// <summary>
