@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QRLibrary.DataStreamFormatSpecifiers.Templates
 {
-    public abstract class AQRDataStreamEncodingFormat : IQRDataStreamEncodingFormat
+    public class AQRDataStreamEncodingFormat : IQRDataStreamEncodingFormat
     {
         /// <summary>
         /// The boolean data representing the binary code
@@ -47,7 +47,7 @@ namespace QRLibrary.DataStreamFormatSpecifiers.Templates
 
         }
 
-        public bool[] getDataArray()
+        public virtual bool[] getDataArray()
         {
             return dataArray;
         }
