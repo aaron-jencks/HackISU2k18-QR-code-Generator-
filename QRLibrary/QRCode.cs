@@ -319,7 +319,7 @@ namespace QRLibrary
             // Does the polynomial division
             List<bool> actual_remainder = new List<bool>(10);
             bool[] remainder = (bool[])temp_bs.Clone();
-            while(remainder.Contains(true))
+            while(remainder.Contains(true) && generator.Contains(true))
             {
                 // XOR the remainder and the divisor
                 for(int i = 0; i < remainder.Length; i++)
@@ -637,20 +637,24 @@ namespace QRLibrary
 
                     #region standard snake
 
+                    #region Position model detector
+
                     // We hit a position block, which isn't accurately represented in the object map
                     // Therefore we need to fast forward until we hit the next wall
                     // Otherwise we should never hit two trues in the object map at the same time
                     // except for when we hit the corner blocks, and we're going to abort before we even hit that
                     // since there's supposed to be a quiet zone.
-                    if(object_mask[i, j] && object_mask[i - 1, j])
+                    if(object_mask[j, i] && object_mask[j, i - 1])
                     {
-                        do { j--; } while (object_mask[i, j] || object_mask[i - 1, j]);
+                        do { j += (toggle) ? -1 : 1; } while (object_mask[j, i] || object_mask[j, i - 1]);
                     }
 
-                    if (!object_mask[i, j])
-                        layout[i, j] = bitStream.Dequeue();
-                    if (!object_mask[i - 1, j])
-                        layout[i - 1, j] = bitStream.Dequeue();
+                    #endregion
+
+                    if (!object_mask[j, i])
+                        layout[j, i] = (bitStream.Count == 0) ? maskPattern.isCalcPattern(j, i) : bitStream.Dequeue();
+                    if (!object_mask[j, i - 1])
+                        layout[j, i - 1] = (bitStream.Count == 0) ? maskPattern.isCalcPattern(j, i) : bitStream.Dequeue();
 
                     #endregion
                 }
