@@ -14,12 +14,12 @@ namespace QRLibrary.DataStreamStructure.Templates
         /// <summary>
         /// The Encoding format for the data stream
         /// </summary>
-        protected IQRDataStreamEncodingFormat format { get; set; }
+        public IQRDataStreamEncodingFormat format { get; set; }
 
         /// <summary>
         /// The payload of the data stream can have any number, depends on the format
         /// </summary>
-        protected List<IQRDataStreamData> payload { get; set; }
+        public List<IQRDataStreamData> payload { get; set; }
 
         #endregion
 
