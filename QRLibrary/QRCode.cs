@@ -122,6 +122,74 @@ namespace QRLibrary
 
         }
 
+        /// <summary>
+        /// Calculates the alphanumeric value for what is considered an alphanumeric character by the QR code standard.
+        /// </summary>
+        /// <param name="c">Character to search for</param>
+        /// <returns>Returns the integer value represented by the character or throws an exception if not found.</returns>
+        public static int FindAlphaNumericNumber(char c)
+        {
+            if (c <= '9' && c >= '0')
+                return Convert.ToInt32("" + c);
+            if (c >= 'A' && c <= 'Z')
+                return 10 + (c - 'A');
+            else
+                switch (c)
+                {
+                    case ' ':
+                        return 36;
+                    case '$':
+                        return 37;
+                    case '%':
+                        return 38;
+                    case '*':
+                        return 39;
+                    case '+':
+                        return 40;
+                    case '-':
+                        return 41;
+                    case '.':
+                        return 42;
+                    case '/':
+                        return 43;
+                    case ':':
+                        return 44;
+                    default:
+                        throw new Exception("Invalid alhpanumeric character!");
+                }
+        }
+
+        /// <summary>
+        /// Finds the alphanumeric pair as specified by the QR code standard
+        /// V = 45 * a + b
+        /// </summary>
+        /// <param name="a">Character a</param>
+        /// <param name="b">Character b</param>
+        /// <returns>Returns the alphanumeric pair of the two characters</returns>
+        public static int FindAlphaNumericPair(char a, char b)
+        {
+            return 45 * FindAlphaNumericNumber(a) + FindAlphaNumericNumber(b);
+        }
+
+        /// <summary>
+        /// Converts an integer into the given number of bits represented by a boolean array
+        /// </summary>
+        /// <param name="num">The number to be converted</param>
+        /// <param name="bits">The number of bits to use</param>
+        /// <returns>Returns a boolean array representing the integer in binary code</returns>
+        public static bool[] ConvertToBoolean(int num, int bits)
+        {
+            if (num > Math.Pow(bits, 2))
+                throw new InvalidOperationException("Number to conver to binary cannot be larger than the largest binary number allowed by the bit count!");
+            bool[] result = new bool[bits];
+            for (int i = bits; i >= 0; i--)
+            {
+                if (((num >> i) & 1) == 1)
+                    result[bits - 1 - i] = true;
+            }
+            return result;
+        }
+
         #endregion
     }
 }
