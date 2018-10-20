@@ -635,6 +635,15 @@ namespace QRLibrary
 
                     #endregion
 
+                    #region Dashed Line skipper
+
+                    if (j == 6)
+                        j += (toggle) ? -1 : 1;
+                    else if (i == 6)
+                        break;
+
+                    #endregion
+
                     #region standard snake
 
                     #region Position model detector
@@ -646,7 +655,7 @@ namespace QRLibrary
                     // since there's supposed to be a quiet zone.
                     if(object_mask[j, i] && object_mask[j, i - 1])
                     {
-                        do { j += (toggle) ? -1 : 1; } while (object_mask[j, i] || object_mask[j, i - 1]);
+                        for(int k = 0; k < 6; k++) { j += (toggle) ? -1 : 1; }
                     }
 
                     #endregion
