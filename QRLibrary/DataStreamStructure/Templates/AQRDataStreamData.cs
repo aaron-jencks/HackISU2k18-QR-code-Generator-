@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace QRLibrary.DataStreamStructure.Templates
 {
-    public class AQRDataStream : IQRDataStreamData
+    /// <summary>
+    /// A parent class that implements the IQRDataStreamData interface.
+    /// </summary>
+    public class AQRDataStreamData : IQRDataStreamData
     {
         #region Properties
 
@@ -29,14 +32,14 @@ namespace QRLibrary.DataStreamStructure.Templates
 
         #region Constructors
 
-        public AQRDataStream(string id, bool[] data)
+        public AQRDataStreamData(string id, bool[] data)
         {
             this.data = data;
             identifier = id;
             bitCount = data.Length;
         }
 
-        public AQRDataStream(string id, string data)
+        public AQRDataStreamData(string id, string data)
         {
             data.Trim();
             this.data = new bool[data.Length];
