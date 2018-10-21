@@ -16,6 +16,8 @@ namespace QRCodeGenerator
     {
         private QRCode code { get; set; } = new QRCode();
         private Tuple<int, int> prevSize { get; set; }
+        private string fileData = "";
+        private bool useFileData = false;
 
         public Form1()
         {
@@ -78,7 +80,8 @@ namespace QRCodeGenerator
         private void textBox_TextChanged(object sender, EventArgs e)
         {
             code.EncodedData.Clear();
-            code.EncodeString(textBox.Text);
+            code.EncodeString((useFileData) ? fileData : textBox.Text);
+            useFileData = false;
             paintCode();
         }
 
@@ -103,7 +106,9 @@ namespace QRCodeGenerator
 
             if(openFileDialog1.FileName != "")
             {
-                textBox.Text = File.ReadAllText(openFileDialog1.FileName);
+                fileData = File.ReadAllText(openFileDialog1.FileName);
+                useFileData = true;
+                textBox.Text = (fileData.Length >= 50000) ? "File Imported contents too big not shown" : fileData;
             }
         }
 

@@ -509,9 +509,9 @@ namespace QRLibrary
             // Fixes the lengths of the rows and columns to be the next nearest number that will fit an exact number of
             // Positioner blocks
             if ((rows - 14) % 22 != 0)
-                rows += (rows - 14) % 22;
+                rows += 1 + ((rows - 14) % 22);
             if ((columns - 14) % 22 != 0)
-                columns += (columns - 14) % 22;
+                columns += 1 + ((columns - 14) % 22);
 
             #endregion
 
@@ -537,11 +537,17 @@ namespace QRLibrary
                         object_mask[i, j] = true;
                     }
                     else if (i == 6 && j > 7 && j < columns - 8 && (j % 2) == 0)    // Dashed horizontal
+                    {
                         layout[i, j] = true;
-                    else if (j == 6 && i > 7 && i < rows - 8 && (i % 2) == 0)    // Dshed Vertical
+                        object_mask[i, j] = true;
+                    }
+                    else if (j == 6 && i > 7 && i < rows - 8 && (i % 2) == 0)    // Dashed Vertical
+                    {
                         layout[i, j] = true;
+                        object_mask[i, j] = true;
+                    }
                     else if ((((i >= 4 && i <= 8) || (j >= 4 && j <= 8)) &&
-                        (((j > 10 && i <= 10) || (i > 10 && j <= 10)) && j < columns - 8 && i < rows - 8)) &&
+                        (((j > 10 && i <= 10) || (i > 10 && j <= 10)) && j < columns - 9 && i < rows - 9)) &&
                         ((((i - 8) % 22) == 2) || (((j - 8) % 22) == 2) ||
                         (((i - 8) % 22) == 20) || (((j - 8) % 22) == 20) ||
                         ((((i - 8) % 22) == 0) && (j == 4 || j == 6 || j == 8)) ||
@@ -552,7 +558,7 @@ namespace QRLibrary
                         layout[i, j] = true;
                         object_mask[i, j] = true;
                     }
-                    else if (((i - 4 != 0 && j - 4 != 0) && (j > 10 && i > 10 && j < columns - 8 && i < rows - 8)) &&
+                    else if (((i - 4 != 0 && j - 4 != 0) && (j > 10 && i > 10 && j < columns - 4 && i < rows - 4)) &&
                         ((((((j - 8) % 22) == 0) && (((i - 8) % 22) != 1) && (((i - 8) % 22) != 21)) ||
                         (((j - 8) % 22) == 2) || (((j - 8) % 22) == 20) ||
                         ((((j - 8) % 22) == 1) && (((i - 8) % 22) != 1)) ||
@@ -578,10 +584,10 @@ namespace QRLibrary
             // We'll use the toggle to switch between going up and going down in the columns of
             // The array
             toggle = true;
-
+            
             for(int i = columns - 1; i >= 0; i -= 2)
             {
-                if (i <= 6)
+                if (i == columns - 3)
                     i += 0;
 
                 for(int j = ((toggle) ? rows - 1 : 0); ((toggle) ? j >= 0 : j < rows); j += ((toggle) ? -1 : 1))
@@ -643,7 +649,7 @@ namespace QRLibrary
                     {
                         if (i > columns - 10)
                         {
-                            if (!toggle)
+                            if (toggle)
                                 break;
                             else
                                 continue;
@@ -703,7 +709,7 @@ namespace QRLibrary
                 // Inverts the toggle 
                 toggle = !toggle;
             }
-
+            
             return layout;
         }
 
