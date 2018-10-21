@@ -369,6 +369,7 @@ namespace QRLibrary
         {
             Queue<bool> bitStream = new Queue<bool>();
 
+            // Also enqueues all of the boolean data into the bitStream queue.
             #region Calculates the number of rows and columns
 
             /// find the total square mass of the booleans in the QR code data
@@ -505,6 +506,13 @@ namespace QRLibrary
                 toggle = !toggle;
             }
 
+            // Fixes the lengths of the rows and columns to be the next nearest number that will fit an exact number of
+            // Positioner blocks
+            if ((rows - 14) % 22 != 0)
+                rows += (rows - 14) % 22;
+            if ((columns - 14) % 22 != 0)
+                columns += (columns - 14) % 22;
+
             #endregion
 
             bool[,] layout = new bool[rows, columns];
@@ -534,25 +542,25 @@ namespace QRLibrary
                         layout[i, j] = true;
                     else if ((((i >= 4 && i <= 8) || (j >= 4 && j <= 8)) &&
                         (((j > 10 && i <= 10) || (i > 10 && j <= 10)) && j < columns - 8 && i < rows - 8)) &&
-                        ((((i - 8) % 20) == 2) || (((j - 8) % 20) == 2) ||
-                        (((i - 8) % 20) == 18) || (((j - 8) % 20) == 18) ||
-                        ((((i - 8) % 20) == 0) && (j == 4 || j == 6 || j == 8)) ||
-                        ((((j - 8) % 20) == 0) && (i == 4 || i == 6 || i == 8)) ||
-                        (((((i - 8) % 20) == 1) || (((i - 8) % 20) == 19)) && (j == 4 || j == 8)) ||
-                        (((((j - 8) % 20) == 1) || (((j - 8) % 20) == 19)) && (i == 4 || i == 8)))) // Positioners on the dashed lines
+                        ((((i - 8) % 22) == 2) || (((j - 8) % 22) == 2) ||
+                        (((i - 8) % 22) == 20) || (((j - 8) % 22) == 20) ||
+                        ((((i - 8) % 22) == 0) && (j == 4 || j == 6 || j == 8)) ||
+                        ((((j - 8) % 22) == 0) && (i == 4 || i == 6 || i == 8)) ||
+                        (((((i - 8) % 22) == 1) || (((i - 8) % 22) == 21)) && (j == 4 || j == 8)) ||
+                        (((((j - 8) % 22) == 1) || (((j - 8) % 22) == 21)) && (i == 4 || i == 8)))) // Positioners on the dashed lines
                     {
                         layout[i, j] = true;
                         object_mask[i, j] = true;
                     }
                     else if (((i - 4 != 0 && j - 4 != 0) && (j > 10 && i > 10 && j < columns - 8 && i < rows - 8)) &&
-                        ((((((j - 8) % 20) == 0) && (((i - 8) % 20) != 1) && (((i - 8) % 20) != 19)) ||
-                        (((j - 8) % 20) == 2) || (((j - 8) % 20) == 18) ||
-                        ((((j - 8) % 20) == 1) && (((i - 8) % 20) != 1)) ||
-                        ((((j - 8) % 20) == 19) && (((i - 8) % 20) != 19))) &&
-                        ((((((i - 8) % 20) == 0) && (((j - 8) % 20) != 1) && (((j - 8) % 20) != 19)) ||
-                        ((i - 8) % 20) == 2 || ((i - 8) % 20) == 18) ||
-                        ((((i - 8) % 20) == 1) && (((j - 8) % 20) != 19)) ||
-                        ((((i - 8) % 20) == 19) && (((j - 8) % 20 != 1))))))    // Positioners not on the dashed lines
+                        ((((((j - 8) % 22) == 0) && (((i - 8) % 22) != 1) && (((i - 8) % 22) != 21)) ||
+                        (((j - 8) % 22) == 2) || (((j - 8) % 22) == 20) ||
+                        ((((j - 8) % 22) == 1) && (((i - 8) % 22) != 1)) ||
+                        ((((j - 8) % 22) == 21) && (((i - 8) % 22) != 21))) &&
+                        ((((((i - 8) % 22) == 0) && (((j - 8) % 22) != 1) && (((j - 8) % 22) != 21)) ||
+                        ((i - 8) % 22) == 2 || ((i - 8) % 22) == 20) ||
+                        ((((i - 8) % 22) == 1) && (((j - 8) % 22) != 21)) ||
+                        ((((i - 8) % 22) == 21) && (((j - 8) % 22 != 1))))))    // Positioners not on the dashed lines
                     {
                         layout[i, j] = true;
                         object_mask[i, j] = true;
@@ -573,6 +581,9 @@ namespace QRLibrary
 
             for(int i = columns - 1; i >= 0; i -= 2)
             {
+                if (i <= 6)
+                    i += 0;
+
                 for(int j = ((toggle) ? rows - 1 : 0); ((toggle) ? j >= 0 : j < rows); j += ((toggle) ? -1 : 1))
                 {
                     #region Corners
@@ -588,7 +599,7 @@ namespace QRLibrary
                         layout[rows - 3, 8] = formats[2];
                         layout[rows - 2, 8] = formats[1];
                         layout[rows - 1, 8] = formats[0];
-                        break;
+                        continue;
                     }
                     else if(j <= 8 && i <= 8)
                     {
@@ -608,7 +619,7 @@ namespace QRLibrary
                         layout[2, 8] = formats[2];
                         layout[1, 8] = formats[1];
                         layout[0, 8] = formats[0];
-                        break;
+                        continue;
                     }
                     else if(j > rows - 8 && i <= 8)
                     {
@@ -620,7 +631,7 @@ namespace QRLibrary
                         layout[rows - 3, 8] = Mask[0];
                         layout[rows - 2, 8] = ECL[1];
                         layout[rows - 1, 8] = ECL[0];
-                        break;
+                        continue;
                     }
 
                     #endregion
@@ -628,7 +639,7 @@ namespace QRLibrary
                     #region corner block breaker
 
                     // Breaks when the iterator is about to enter the formatting zone, or quiet zone
-                    if (j < 9 && i > columns - 10)
+                    if (j < 9)
                     {
                         if (i > columns - 10)
                         {
@@ -660,7 +671,7 @@ namespace QRLibrary
                     if (j == 6)
                         continue;
                     else if (i == 6)
-                        break;
+                        break;      // Why doesn't the code ever reach this?
 
                     #endregion
 
@@ -683,7 +694,7 @@ namespace QRLibrary
 
                     if (!object_mask[j, i])
                         layout[j, i] = (bitStream.Count == 0) ? maskPattern.isCalcPattern(j, i) : bitStream.Dequeue();
-                    if (!object_mask[j, i - 1])
+                    if (i > 0 && !object_mask[j, i - 1])
                         layout[j, i - 1] = (bitStream.Count == 0) ? maskPattern.isCalcPattern(j, i) : bitStream.Dequeue();
 
                     #endregion
