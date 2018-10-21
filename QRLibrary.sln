@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QRLibrary", "QRLibrary\QRLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QRCodeGenerator", "QRCodeGenerator\QRCodeGenerator.csproj", "{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{AA2D2C31-72AA-4EEA-88A7-9B9387CB4A73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidApp.Android", "AndroidApp\AndroidApp.Android\AndroidApp.Android.csproj", "{2EB68A48-16ED-44C6-9975-9AC97A947A8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidApp", "AndroidApp\AndroidApp\AndroidApp.csproj", "{F099C448-E341-40B6-B4CC-2D113313D90C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,23 @@ Global
 		{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD851BDA-6E86-418B-A1ED-B15CAEDC4DDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EB68A48-16ED-44C6-9975-9AC97A947A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EB68A48-16ED-44C6-9975-9AC97A947A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EB68A48-16ED-44C6-9975-9AC97A947A8E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2EB68A48-16ED-44C6-9975-9AC97A947A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EB68A48-16ED-44C6-9975-9AC97A947A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EB68A48-16ED-44C6-9975-9AC97A947A8E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F099C448-E341-40B6-B4CC-2D113313D90C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F099C448-E341-40B6-B4CC-2D113313D90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F099C448-E341-40B6-B4CC-2D113313D90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F099C448-E341-40B6-B4CC-2D113313D90C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2EB68A48-16ED-44C6-9975-9AC97A947A8E} = {AA2D2C31-72AA-4EEA-88A7-9B9387CB4A73}
+		{F099C448-E341-40B6-B4CC-2D113313D90C} = {AA2D2C31-72AA-4EEA-88A7-9B9387CB4A73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98A7ECAA-6FCB-410E-BF8A-F3BA02F3C182}
