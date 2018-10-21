@@ -8,10 +8,13 @@
         <!-- Place new controls here -->
         <Label Text="Aaron's Custom QR Code Generator!" 
            HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-        <Entry Text="Enter Text Here!"
+           VerticalOptions="CenterAndExpand" 
+               x:Name="headingLabel"/>
+        <Editor Text=""
                HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" />
+               VerticalOptions="CenterAndExpand"
+                x:Name="textEditor"/>
+        <Image x:Name="canvasImage" />
     </StackLayout>
 
 </ContentPage>
