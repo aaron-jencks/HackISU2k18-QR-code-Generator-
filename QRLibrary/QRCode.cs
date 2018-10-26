@@ -317,30 +317,34 @@ namespace QRLibrary
             false, false, false, false, false };
 
             // Does the polynomial division
-            List<bool> actual_remainder = new List<bool>(10);
+            List<bool> actual_remainder = new List<bool>(10) { false, false, false, false, false, false, false, false, false, false };
             bool[] remainder = (bool[])temp_bs.Clone();
-            while(remainder.Contains(true) && generator.Contains(true))
+            while(generator.Contains(true))
             {
                 // XOR the remainder and the divisor
+
+                // Finds the first true(1) in the generator polynomial
+                int first_true_index = -1;
+                for(int i = 0; i < generator.Length; i++)
+                    if(generator[i])
+                    {
+                        first_true_index = i;
+                        break;
+                    }
+
+                int first_remainder_index = -1;
+
                 for(int i = 0; i < remainder.Length; i++)
                 {
-                    remainder[i] = remainder[i] ^ generator[i];
-                }
+                    if (i + first_true_index < generator.Length)
+                        generator[i + first_true_index] = (remainder[i] || generator[i + first_true_index]) && !(remainder[i] || generator[i + first_true_index]);
+                    else
+                    {
+                        if (first_remainder_index < 0)
+                            first_remainder_index = i;
 
-                // Adds the last element of the generator to the actual remainder
-                actual_remainder.Add(generator[generator.Length - 1]);
-                // Maintains the remainder list size of 10
-                if (actual_remainder.Count > 10)
-                    actual_remainder.RemoveAt(0);
-
-
-                // Shifts the generator values down one position
-                bool prev = false;
-                for(int i = 0; i < generator.Length; i++)
-                {
-                    bool temp = generator[i];
-                    generator[i] = prev;
-                    prev = temp;
+                        actual_remainder[i - first_remainder_index] = remainder[i] ^ actual_remainder[i - first_remainder_index];
+                    }
                 }
             }
 
